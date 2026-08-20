@@ -24,6 +24,13 @@ pipeline {
                 }
             }
         }
+        stage('Static Analysis') {
+            steps {
+                // report-only goal; does not fail the build on violations
+                sh 'mvn -B spotbugs:spotbugs'
+                archiveArtifacts artifacts: 'target/spotbugsXml.xml', fingerprint: true
+            }
+        }
         stage('Archive') {
             steps {
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
