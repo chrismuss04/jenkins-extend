@@ -35,6 +35,15 @@ pipeline {
             steps {
                 sh 'mvn -B jacoco:report'
                 archiveArtifacts artifacts: 'target/site/jacoco/**', fingerprint: true
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'target/site/jacoco',
+                    reportFiles: 'index.html',
+                    reportName: 'JaCoCo Coverage Report'
+                ])
+                recordCoverage(tools: [[parser: 'JACOCO', pattern: 'target/site/jacoco/jacoco.xml']])
             }
         }
         stage('Archive') {
